@@ -92,7 +92,12 @@ func (c *clients) generateCoverLetter(urlStr, company string) error {
 }
 
 func saveCoverLetter(result, company string) error {
-	folderPath := "letters"
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		return fmt.Errorf("error getting home directory: %w", err)
+	}
+
+	folderPath := filepath.Join(homeDir, ".gogomate", "data")
 	if err := os.MkdirAll(folderPath, 0755); err != nil {
 		return err
 	}
@@ -111,5 +116,6 @@ func saveCoverLetter(result, company string) error {
 		return err
 	}
 
+	fmt.Printf("Letter saved to: %s\n", filePath)
 	return nil
 }
