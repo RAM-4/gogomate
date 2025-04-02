@@ -6,7 +6,7 @@
 
 - Scrapes job posting content from provided URLs
 - Generates customized cover letters using Mistral AI
-- Automatically saves generated letters to a local directory
+- Automatically saves generated letters to `~/.gogomate/data`
 - Copies the generated letter to your clipboard
 - Simple command-line interface
 
@@ -24,9 +24,9 @@
    cd gogomate
    ```
 
-2. Build the binary:
+2. Build the binary using Make:
    ```bash
-   go build ./cmd/gogomate
+   make build
    ```
 
 3. (Optional) Move the binary to your PATH:
@@ -73,12 +73,24 @@ gogomate gen "https://example.com/job-posting" "Example Corp"
 
 ## 📂 Output
 
-- Generated cover letters are saved in the `letters/` directory
+- Generated cover letters are saved in `~/.gogomate/data/`
 - File naming format: `{company_name}_{timestamp}.txt` or `letter_{timestamp}.txt`
 - The generated letter is automatically copied to your clipboard
+
+## 🧹 Cleaning Up
+
+To remove the built binary:
+```bash
+make clean
+```
+
+To remove both the binary and all generated cover letters:
+```bash
+make clean-all
+```
 
 ## 📝 Notes
 
 - If the URL contains special characters, wrap it in quotes
-- The tool creates a `letters` directory in your current working directory
-- Make sure you have write permissions in the current directory
+- The tool automatically creates necessary directories in your home folder
+- Generated files are stored with secure permissions (600)
