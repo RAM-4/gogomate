@@ -36,8 +36,8 @@ func NewCLI(cfg *config.Config) *cli.App {
 		Description: "Generate a personalized cover letter from a job posting URL",
 		Commands: []*cli.Command{
 			{
-				Name:      "cover-letter",
-				Aliases:   []string{"cl"},
+				Name:      "generate",
+				Aliases:   []string{"gen"},
 				Usage:     "Generate a cover letter from a job posting URL",
 				ArgsUsage: "URL",
 				Action:    c.generateCoverLetterFromURL,
