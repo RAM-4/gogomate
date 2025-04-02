@@ -43,7 +43,7 @@ func NewCLI(cfg *config.Config) *cli.App {
 				Name:      "generate",
 				Aliases:   []string{"gen"},
 				Usage:     "Generate a cover letter from a job posting URL",
-				ArgsUsage: "URL",
+				ArgsUsage: "URL [COMPANY_NAME]",
 				Action:    c.generateCoverLetterFromURL,
 			},
 		},
@@ -51,27 +51,30 @@ func NewCLI(cfg *config.Config) *cli.App {
 }
 
 func (c *clients) generateCoverLetterFromURL(ctx *cli.Context) error {
-	url, err := c.validateURL(ctx)
+	url, company, err := c.validateArgs(ctx)
 	if err != nil {
 		return err
 	}
 
-	return c.generateCoverLetter(url)
+	return c.generateCoverLetter(url, company)
 }
 
-func (c *clients) validateURL(ctx *cli.Context) (string, error) {
+func (c *clients) validateArgs(ctx *cli.Context) (string, string, error) {
 	if ctx.NArg() < 1 {
-		return "", fmt.Errorf("missing URL argument")
+		return "", "", fmt.Errorf("missing URL argument")
 	}
 
 	urlStr := ctx.Args().First()
 	if _, err := url.ParseRequestURI(urlStr); err != nil {
-		return "", fmt.Errorf("invalid URL: %w\nTip: If your URL contains special characters, wrap it in quotes", err)
+		return "", "", fmt.Errorf("invalid URL: %w\nTip: If your URL contains special characters, wrap it in quotes", err)
 	}
-	return urlStr, nil
+
+	company := ctx.Args().Get(1)
+
+	return urlStr, company, nil
 }
 
-func (c *clients) generateCoverLetter(urlStr string) error {
+func (c *clients) generateCoverLetter(urlStr, company string) error {
 	content, err := c.scraper.Content(urlStr)
 	if err != nil {
 		return fmt.Errorf("error scraping content: %w", err)
@@ -82,20 +85,26 @@ func (c *clients) generateCoverLetter(urlStr string) error {
 		return fmt.Errorf("error generating cover letter: %w", err)
 	}
 
-	if err := saveCoverLetter(coverLetter); err != nil {
+	if err := saveCoverLetter(coverLetter, company); err != nil {
 		return fmt.Errorf("error saving cover letter: %w", err)
 	}
 	return clipboard.WriteAll(coverLetter)
 }
 
-func saveCoverLetter(result string) error {
+func saveCoverLetter(result, company string) error {
 	folderPath := "letters"
 	if err := os.MkdirAll(folderPath, 0755); err != nil {
 		return err
 	}
 
 	timestamp := time.Now().Format("20060102_150405")
-	filename := fmt.Sprintf("letter_%s.txt", timestamp)
+	var filename string
+	if company != "" {
+		filename = fmt.Sprintf("%s_%s.txt", company, timestamp)
+	} else {
+		filename = fmt.Sprintf("letter_%s.txt", timestamp)
+	}
+
 	filePath := filepath.Join(folderPath, filename)
 
 	if err := os.WriteFile(filePath, []byte(result), 0600); err != nil {
