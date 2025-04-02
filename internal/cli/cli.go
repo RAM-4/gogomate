@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"os"
+	"path/filepath"
+	"time"
 
 	"gogomate/internal/client"
 	"gogomate/internal/config"
@@ -79,6 +82,25 @@ func (c *clients) generateCoverLetter(urlStr string) error {
 		return fmt.Errorf("error generating cover letter: %w", err)
 	}
 
-	fmt.Println(coverLetter)
+	if err := saveCoverLetter(coverLetter); err != nil {
+		return fmt.Errorf("error saving cover letter: %w", err)
+	}
 	return clipboard.WriteAll(coverLetter)
+}
+
+func saveCoverLetter(result string) error {
+	folderPath := "letters"
+	if err := os.MkdirAll(folderPath, 0755); err != nil {
+		return err
+	}
+
+	timestamp := time.Now().Format("20060102_150405")
+	filename := fmt.Sprintf("letter_%s.txt", timestamp)
+	filePath := filepath.Join(folderPath, filename)
+
+	if err := os.WriteFile(filePath, []byte(result), 0600); err != nil {
+		return err
+	}
+
+	return nil
 }
