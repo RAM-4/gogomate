@@ -8,6 +8,7 @@ import (
 	"gogomate/internal/client"
 	"gogomate/internal/config"
 
+	"github.com/atotto/clipboard"
 	"github.com/urfave/cli/v2"
 )
 
@@ -79,5 +80,5 @@ func (c *clients) generateCoverLetter(urlStr string) error {
 	}
 
 	fmt.Println(coverLetter)
-	return nil
+	return clipboard.WriteAll(coverLetter)
 }
