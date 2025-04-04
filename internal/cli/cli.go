@@ -12,6 +12,7 @@ import (
 	"gogomate/internal/config"
 
 	"github.com/atotto/clipboard"
+	"github.com/briandowns/spinner"
 	"github.com/urfave/cli/v2"
 )
 
@@ -75,6 +76,10 @@ func (c *clients) validateArgs(ctx *cli.Context) (string, string, error) {
 }
 
 func (c *clients) generateCoverLetter(urlStr, company string) error {
+	s := spinner.New(spinner.CharSets[35], 100*time.Millisecond)
+	s.Suffix = "  Gogo mate ! Generating cover letter"
+	s.Start()
+
 	content, err := c.scraper.Content(urlStr)
 	if err != nil {
 		return fmt.Errorf("error scraping content: %w", err)
@@ -85,6 +90,7 @@ func (c *clients) generateCoverLetter(urlStr, company string) error {
 		return fmt.Errorf("error generating cover letter: %w", err)
 	}
 
+	s.Stop()
 	if err := saveCoverLetter(coverLetter, company); err != nil {
 		return fmt.Errorf("error saving cover letter: %w", err)
 	}
