@@ -94,6 +94,8 @@ func (c *clients) generateCoverLetter(urlStr, company string) error {
 	if err := saveCoverLetter(coverLetter, company); err != nil {
 		return fmt.Errorf("error saving cover letter: %w", err)
 	}
+
+	fmt.Println("Copied to clipboard and ready to go mate 🙌")
 	return clipboard.WriteAll(coverLetter)
 }
 
