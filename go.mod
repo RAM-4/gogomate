@@ -6,6 +6,7 @@ require (
 	github.com/PuerkitoBio/goquery v1.10.2
 	github.com/atotto/clipboard v0.1.4
 	github.com/briandowns/spinner v1.23.2
+	github.com/google/go-cmp v0.6.0
 	github.com/urfave/cli/v2 v2.27.6
 )
 
