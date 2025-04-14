@@ -5,6 +5,12 @@ import (
 	"os"
 )
 
+const (
+	endpoint   = "https://api.mistral.ai/v1/agents/completions"
+	apiKeyEnv  = "MISTRAL_API_KEY"
+	agentIDEnv = "MISTRAL_AGENT_ID"
+)
+
 type Config struct {
 	MistralAPIKey      string
 	MistralAgentID     string
@@ -20,19 +26,19 @@ func requireEnv(key string) (string, error) {
 }
 
 func Load() (*Config, error) {
-	mistralAPIKey, err := requireEnv("MISTRAL_API_KEY")
+	apiKey, err := requireEnv(apiKeyEnv)
 	if err != nil {
 		return nil, err
 	}
 
-	mistralAgentID, err := requireEnv("MISTRAL_AGENT_ID")
+	agentID, err := requireEnv(agentIDEnv)
 	if err != nil {
 		return nil, err
 	}
 
 	return &Config{
-		MistralAPIKey:      mistralAPIKey,
-		MistralAgentID:     mistralAgentID,
-		MistralAPIEndpoint: "https://api.mistral.ai/v1/agents/completions",
+		MistralAPIKey:      apiKey,
+		MistralAgentID:     agentID,
+		MistralAPIEndpoint: endpoint,
 	}, nil
 }
