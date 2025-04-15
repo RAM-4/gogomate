@@ -21,9 +21,9 @@ func TestLoad(t *testing.T) {
 				agentIDEnv: "test-agent",
 			},
 			want: &Config{
-				MistralAPIKey:      "test-key",
-				MistralAgentID:     "test-agent",
-				MistralAPIEndpoint: endpoint,
+				APIKey:      "test-key",
+				AgentID:     "test-agent",
+				APIEndpoint: endpoint,
 			},
 		},
 		{

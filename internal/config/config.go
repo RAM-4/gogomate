@@ -12,9 +12,9 @@ const (
 )
 
 type Config struct {
-	MistralAPIKey      string
-	MistralAgentID     string
-	MistralAPIEndpoint string
+	APIKey      string
+	AgentID     string
+	APIEndpoint string
 }
 
 func requireEnv(key string) (string, error) {
@@ -37,8 +37,8 @@ func Load() (*Config, error) {
 	}
 
 	return &Config{
-		MistralAPIKey:      apiKey,
-		MistralAgentID:     agentID,
-		MistralAPIEndpoint: endpoint,
+		APIKey:      apiKey,
+		AgentID:     agentID,
+		APIEndpoint: endpoint,
 	}, nil
 }

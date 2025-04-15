@@ -29,9 +29,9 @@ func NewCLI(cfg *config.Config) *cli.App {
 		),
 		mistral: client.NewMistralClient(
 			httpClient,
-			cfg.MistralAPIKey,
-			cfg.MistralAgentID,
-			cfg.MistralAPIEndpoint,
+			cfg.APIKey,
+			cfg.AgentID,
+			cfg.APIEndpoint,
 		),
 	}
 
