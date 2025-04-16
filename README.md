@@ -2,6 +2,8 @@
 
 > A CLI tool that leverages AI to generate personalized cover letters from job posting URLs.
 
+[![Unit Tests](https://github.com/RAM-4/gogomate/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/RAM-4/gogomate/actions/workflows/unit-tests.yml)
+
 ## 🛠️ Features
 
 - Scrapes job posting content from provided URLs
